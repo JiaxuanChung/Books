@@ -1,18 +1,18 @@
 <div class="col-md-4 col-md-offset-4">
-    <h2>新增图书组</h2>
+    <h2>图书组编辑</h2>
 
     <hr>
     <%= form_for @group do |f| %>
 
-    图书类别
+    图书组名称
     <%= f.text_field :title %>
     <br>
-    图书简介
+    图书组简介
     <br>
     <%= f.text_area :description %>
     <br>
 
-    <%= f.submit "确认", :disable_with => 'Submitting...' %>
+    <%= f.submit "确认", :disable_with => 'Submiting...' %>
     <% end %>
 
 </div>
