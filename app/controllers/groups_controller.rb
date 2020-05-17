@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action :authenticate_user! , only: [:new, :create, :edit, :update, :destroy]
+  before_action :authenticate_user! , only: [:new, :create, :edit, :update, :destroy, :join, :quit]
   before_action :find_group_and_check_permission, only: [:edit, :update, :destroy]
 
   def index
@@ -42,13 +42,39 @@ class GroupsController < ApplicationController
     redirect_to groups_path
   end
 
+  def join
+   @group = Group.find(params[:id])
+
+    if !current_user.is_member_of?(@group)
+      current_user.join!(@group)
+      flash[:notice] = "加入图书组成功！"
+    else
+      flash[:warning] = "你已经是本图书组成员了！"
+    end
+
+    redirect_to group_path(@group)
+  end
+
+  def quit
+    @group = Group.find(params[:id])
+
+    if current_user.is_member_of?(@group)
+      current_user.quit!(@group)
+      flash[:alert] = "已退出本图书组！"
+    else
+      flash[:warning] = "你不是本图书组成员哟"
+    end
+
+    redirect_to group_path(@group)
+  end
+
  private
 
  def find_group_and_check_permission
     @group = Group.find(params[:id])
 
     if current_user != @group.user
-      redirect_to root_path, alert: "You have no permission."
+      redirect_to root_path, alert: "你还没获得权限哦"
     end
   end
 
